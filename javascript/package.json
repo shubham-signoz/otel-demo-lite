@@ -1,0 +1,32 @@
+{
+    "name": "otel-mock-js",
+    "version": "1.0.0",
+    "description": "OTel Demo JavaScript Services Mock",
+    "main": "main.js",
+    "scripts": {
+        "frontend": "node frontend.js",
+        "payment": "node payment.js",
+        "ad": "node ad.js",
+        "email": "node email.js",
+        "all": "concurrently \"npm run frontend\" \"npm run payment\" \"npm run ad\" \"npm run email\""
+    },
+    "dependencies": {
+        "@opentelemetry/api": "^1.7.0",
+        "@opentelemetry/api-logs": "^0.45.0",
+        "@opentelemetry/sdk-node": "^0.45.0",
+        "@opentelemetry/sdk-trace-node": "^1.18.0",
+        "@opentelemetry/sdk-metrics": "^1.18.0",
+        "@opentelemetry/sdk-logs": "^0.45.0",
+        "@opentelemetry/exporter-trace-otlp-http": "^0.45.0",
+        "@opentelemetry/exporter-metrics-otlp-http": "^0.45.0",
+        "@opentelemetry/exporter-logs-otlp-http": "^0.45.0",
+        "@opentelemetry/exporter-trace-otlp-grpc": "^0.45.0",
+        "@opentelemetry/exporter-metrics-otlp-grpc": "^0.45.0",
+        "@opentelemetry/instrumentation-http": "^0.45.0",
+        "@opentelemetry/host-metrics": "^0.35.0",
+        "@opentelemetry/resources": "^1.18.0",
+        "@opentelemetry/semantic-conventions": "^1.18.0",
+        "@opentelemetry/propagator-b3": "^1.18.0",
+        "@opentelemetry/core": "^1.18.0"
+    }
+}

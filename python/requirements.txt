@@ -1,0 +1,12 @@
+# FastAPI + Uvicorn
+fastapi==0.115.6
+uvicorn==0.34.0
+
+# OpenTelemetry auto-instrumentation
+opentelemetry-distro==0.49b0
+opentelemetry-exporter-otlp==1.28.0
+opentelemetry-instrumentation-fastapi==0.49b0
+opentelemetry-instrumentation-logging==0.49b0
+
+# System metrics (CPU, memory, network) - correlated with traces
+opentelemetry-instrumentation-system-metrics==0.49b0

@@ -1,0 +1,43 @@
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.91.0
+    container_name: otel-collector
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+      # Mount host filesystem for hostmetrics receiver
+      - /:/hostfs:ro
+      - /proc:/hostfs/proc:ro
+      - /sys:/hostfs/sys:ro
+    environment:
+      - HOST_PROC=/hostfs/proc
+      - HOST_SYS=/hostfs/sys
+      - HOST_ETC=/hostfs/etc
+      - HOST_VAR=/hostfs/var
+      - HOST_RUN=/hostfs/run
+      - HOST_DEV=/hostfs/dev
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    command: [ "redis-server", "--appendonly", "yes" ]
+
+  otel-mock:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: otel-mock
+    environment:
+      - COUNT=${COUNT:-5}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT_HTTP=http://otel-collector:4318
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      - REDIS_ADDR=redis:6379
+    depends_on:
+      - otel-collector
+      - redis
+    ports:
+      - "8090:8090"

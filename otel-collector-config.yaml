@@ -1,0 +1,79 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  
+  # Host metrics receiver for system-level metrics
+  hostmetrics:
+    collection_interval: 30s
+    root_path: /hostfs
+    scrapers:
+      cpu:
+        metrics:
+          system.cpu.utilization:
+            enabled: true
+      memory:
+        metrics:
+          system.memory.utilization:
+            enabled: true
+      disk:
+      filesystem:
+      load:
+      network:
+      paging:
+      process:
+        mute_process_name_error: true
+        mute_process_exe_error: true
+        mute_process_io_error: true
+
+processors:
+  batch:
+    timeout: 1s
+    send_batch_size: 1024
+  
+  # Add resource attributes for host identification
+  resourcedetection:
+    detectors: [env, system, docker]
+    timeout: 5s
+    override: false
+
+exporters:
+  # Console/logging exporter for stdout verification
+  logging:
+    verbosity: detailed
+    sampling_initial: 5
+    sampling_thereafter: 200
+
+  # Debug exporter shows full telemetry
+  debug:
+    verbosity: detailed
+
+  # SigNoz OTLP gRPC exporter
+  otlp/signoz:
+    endpoint: 192.168.0.10:4317
+    tls:
+      insecure: true 
+service:
+  telemetry:
+    logs:
+      level: info
+
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, debug, otlp/signoz]
+    
+    metrics:
+      receivers: [otlp, hostmetrics]
+      processors: [resourcedetection, batch]
+      exporters: [logging, debug, otlp/signoz]
+    
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, debug, otlp/signoz]
+
