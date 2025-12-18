@@ -51,11 +51,15 @@ exporters:
   debug:
     verbosity: detailed
 
-  # SigNoz OTLP gRPC exporter
-  otlp/signoz:
-    endpoint: 192.168.0.10:4317
+  # OTLP gRPC exporter
+  otlp:
+    endpoint: ${env:OTLP_ENDPOINT}
+    headers:
+      signoz-ingestion-key: ${env:SIGNOZ_INGESTION_KEY}
     tls:
-      insecure: true 
+      insecure: ${env:OTLP_INSECURE}
+      insecure_skip_verify: ${env:OTLP_INSECURE_SKIP_VERIFY}
+      
 service:
   telemetry:
     logs:
@@ -65,15 +69,15 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging, debug, otlp/signoz]
+      exporters: [logging, otlp]
     
     metrics:
       receivers: [otlp, hostmetrics]
       processors: [resourcedetection, batch]
-      exporters: [logging, debug, otlp/signoz]
+      exporters: [logging, otlp]
     
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [logging, debug, otlp/signoz]
+      exporters: [logging, otlp]
 

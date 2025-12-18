@@ -35,7 +35,7 @@ opentelemetry-instrument \
     --traces_exporter otlp \
     --metrics_exporter otlp \
     --logs_exporter otlp \
-    uvicorn recommendation:app --host 0.0.0.0 --port 8086 --workers 4 &
+    uvicorn recommendation:app --host 0.0.0.0 --port 8086 &
 sleep 0.3
 
 OTEL_SERVICE_NAME=quote-python \
@@ -48,7 +48,7 @@ opentelemetry-instrument \
     --traces_exporter otlp \
     --metrics_exporter otlp \
     --logs_exporter otlp \
-    uvicorn quote:app --host 0.0.0.0 --port 8094 --workers 4 &
+    uvicorn quote:app --host 0.0.0.0 --port 8094 &
 sleep 0.3
 
 echo "Starting Browser Simulator..."

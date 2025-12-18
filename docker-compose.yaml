@@ -16,6 +16,11 @@ services:
       - HOST_VAR=/hostfs/var
       - HOST_RUN=/hostfs/run
       - HOST_DEV=/hostfs/dev
+      # OTLP exporter configuration - override these when running through environment variables
+      - OTLP_ENDPOINT=${OTLP_ENDPOINT:-ingest.us.signoz.cloud:443}
+      - SIGNOZ_INGESTION_KEY=${SIGNOZ_INGESTION_KEY:-}
+      - OTLP_INSECURE=${OTLP_INSECURE:-false}
+      - OTLP_INSECURE_SKIP_VERIFY=${OTLP_INSECURE_SKIP_VERIFY:-false}
     ports:
       - "4317:4317"
       - "4318:4318"
@@ -41,3 +46,7 @@ services:
       - redis
     ports:
       - "8090:8090"
+
+networks:
+  default:
+    name: otel-demo
